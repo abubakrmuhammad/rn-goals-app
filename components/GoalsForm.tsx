@@ -49,7 +49,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignContent: 'center',
     gap: 8,
-    marginTop: 'auto',
   },
   input: {
     backgroundColor: '#fff',
@@ -73,7 +72,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 14,
-    lineHeight: 24,
+    lineHeight: 18,
     fontWeight: 'bold',
     letterSpacing: 0.25,
     color: 'white',

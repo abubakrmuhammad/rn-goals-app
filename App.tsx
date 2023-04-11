@@ -1,5 +1,13 @@
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
-import { Platform, StyleSheet, Text, View, StatusBar } from 'react-native';
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  StatusBar,
+  KeyboardAvoidingView,
+} from 'react-native';
+import Constants from 'expo-constants';
 import { GoalsContextProvider, useGoalsContext } from './context/goalsContext';
 import GoalsList from './components/GoalsList';
 import GoalsForm from './components/GoalsForm';
@@ -26,9 +34,13 @@ function App() {
         <GoalsList />
       </View>
 
-      <View style={styles.formWrapper}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.formWrapper}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 16 : 20}
+      >
         <GoalsForm />
-      </View>
+      </KeyboardAvoidingView>
 
       <ExpoStatusBar style='auto' />
     </View>
@@ -49,11 +61,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#f1f5f9',
     alignItems: 'center',
     paddingHorizontal: 24,
-    paddingTop: StatusBar.currentHeight,
     paddingBottom: 32,
+    ...Platform.select({
+      ios: {
+        paddingTop: Constants.statusBarHeight,
+      },
+      android: {
+        paddingTop: StatusBar.currentHeight,
+      },
+    }),
   },
   titleWrapper: {
-    marginTop: 48,
+    marginTop: 16,
     marginBottom: 24,
     alignItems: 'center',
   },
@@ -67,20 +86,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   formWrapper: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignContent: 'center',
-    gap: 8,
     marginTop: 'auto',
-  },
-  input: {
-    backgroundColor: '#fff',
-    borderColor: '#94a3b8',
-    borderBottomWidth: 2,
-    borderRadius: 4,
-    padding: 12,
-    flexGrow: 1,
+    paddingBottom: 28,
   },
   goalsWrapper: {
     width: '100%',
@@ -94,27 +101,5 @@ const styles = StyleSheet.create({
   goalsHeading: {
     color: '#0f172a',
     fontSize: 24,
-  },
-  goalsList: {
-    marginVertical: 12,
-  },
-  goalWrapper: {
-    padding: 12,
-    paddingVertical: 18,
-    backgroundColor: '#fff',
-    color: '#1e293b',
-    marginBottom: 8,
-    borderRadius: 4,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.2,
-        shadowRadius: 1,
-      },
-      android: {
-        elevation: 1,
-      },
-    }),
   },
 });
