@@ -1,53 +1,47 @@
-import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
-import { Platform, StyleSheet, Text, View, StatusBar } from 'react-native';
-import { GoalsContextProvider, useGoalsContext } from './context/goalsContext';
-import GoalsList from './components/GoalsList';
-import GoalsForm from './components/GoalsForm';
+import {
+  FlatList,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  StatusBar,
+} from 'react-native';
+import { useGoalsContext } from '../context/goalsContext';
 
-function App() {
-  const { numberOfGoals } = useGoalsContext();
-
+function GoalItem(props: { index: number; title: string }) {
+  const { index, title } = props;
   return (
-    <View style={styles.container}>
-      <View style={styles.titleWrapper}>
-        <Text style={styles.title}>React Native Goals App</Text>
-        <Text style={styles.subtitle}>Getting Started with React Native</Text>
-      </View>
-
-      <View style={styles.goalsWrapper}>
-        <Text style={styles.goalsHeading}>Your Goals ({numberOfGoals})</Text>
-
-        {numberOfGoals === 0 && (
-          <Text style={styles.placeholderText}>
-            Your goals will display here!
-          </Text>
-        )}
-
-        <GoalsList />
-      </View>
-
-      <View style={styles.formWrapper}>
-        <GoalsForm />
-      </View>
-
-      <ExpoStatusBar style='auto' />
+    <View style={styles.goalItem}>
+      <Text>
+        {index + 1}. {title}
+      </Text>
     </View>
   );
 }
 
-export default function AppWithProviders() {
+function GoalsList() {
+  const { goals } = useGoalsContext();
+
   return (
-    <GoalsContextProvider>
-      <App />
-    </GoalsContextProvider>
+    <FlatList
+      style={styles.goalsList}
+      data={goals}
+      keyExtractor={(item) => item.id}
+      renderItem={({ item, index }) => (
+        <GoalItem index={index} title={item.title} />
+      )}
+    />
   );
 }
+
+export default GoalsList;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f1f5f9',
     alignItems: 'center',
+    // justifyContent: 'center',
     paddingHorizontal: 24,
     paddingTop: StatusBar.currentHeight,
     paddingBottom: 32,
@@ -98,7 +92,7 @@ const styles = StyleSheet.create({
   goalsList: {
     marginVertical: 12,
   },
-  goalWrapper: {
+  goalItem: {
     padding: 12,
     paddingVertical: 18,
     backgroundColor: '#fff',
@@ -116,5 +110,8 @@ const styles = StyleSheet.create({
         elevation: 1,
       },
     }),
+  },
+  addButton: {
+    backgroundColor: '#94a3b8',
   },
 });
