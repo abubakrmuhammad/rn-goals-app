@@ -5,16 +5,31 @@ import {
   Text,
   View,
   StatusBar,
+  Pressable,
 } from 'react-native';
 import { useGoalsContext } from '../context/goalsContext';
 
-function GoalItem(props: { index: number; title: string }) {
-  const { index, title } = props;
+function GoalItem(props: { index: number; title: string; id: string }) {
+  const { index, id, title } = props;
+  const { deleteGoal } = useGoalsContext();
+
   return (
     <View style={styles.goalItem}>
       <Text>
         {index + 1}. {title}
       </Text>
+      {/* delete button */}
+      <Pressable
+        style={({ pressed }) => [
+          { opacity: pressed ? 0.5 : 1 },
+          styles.deleteButton,
+        ]}
+        onPress={() => {
+          deleteGoal(id);
+        }}
+      >
+        <Text style={styles.deleteButtonText}>Delete</Text>
+      </Pressable>
     </View>
   );
 }
@@ -28,7 +43,7 @@ function GoalsList() {
       data={goals}
       keyExtractor={(item) => item.id}
       renderItem={({ item, index }) => (
-        <GoalItem index={index} title={item.title} />
+        <GoalItem index={index} id={item.id} title={item.title} />
       )}
     />
   );
@@ -41,7 +56,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f1f5f9',
     alignItems: 'center',
-    // justifyContent: 'center',
     paddingHorizontal: 24,
     paddingTop: StatusBar.currentHeight,
     paddingBottom: 32,
@@ -99,6 +113,9 @@ const styles = StyleSheet.create({
     color: '#1e293b',
     marginBottom: 8,
     borderRadius: 4,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -113,5 +130,22 @@ const styles = StyleSheet.create({
   },
   addButton: {
     backgroundColor: '#94a3b8',
+  },
+  addButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    padding: 12,
+    paddingHorizontal: 16,
+    borderRadius: 4,
+  },
+  deleteButton: {
+    backgroundColor: '#f56565',
+    borderRadius: 4,
+    padding: 8,
+    paddingHorizontal: 12,
+  },
+  deleteButtonText: {
+    color: '#fff',
+    fontSize: 16,
   },
 });

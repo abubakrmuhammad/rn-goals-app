@@ -11,6 +11,7 @@ interface IGoalsContext {
   goals: Goal[];
   addGoal: (goal: string) => void;
   numberOfGoals: number;
+  deleteGoal: (goalId: string) => void;
 }
 
 const GoalsContext = createContext<IGoalsContext>({} as IGoalsContext);
@@ -30,6 +31,12 @@ export function GoalsContextProvider({ children }: PropsWithChildren) {
     ]);
   }, []);
 
+  const deleteGoal = useCallback((goalId: string) => {
+    setGoals((prevGoals) => {
+      return prevGoals.filter((goal) => goal.id !== goalId);
+    });
+  }, []);
+
   const numberOfGoals = goals.length;
 
   return (
@@ -37,6 +44,7 @@ export function GoalsContextProvider({ children }: PropsWithChildren) {
       value={{
         goals,
         addGoal,
+        deleteGoal,
         numberOfGoals,
       }}
     >

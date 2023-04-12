@@ -31,7 +31,10 @@ function GoalsForm() {
       />
 
       <Pressable
-        style={styles.addButton}
+        style={({ pressed }) => [
+          { opacity: pressed ? 0.5 : 1 },
+          styles.addButton,
+        ]}
         onPress={() => addGoalHandler(inputValue)}
       >
         <Text style={styles.text}>Add Goal</Text>
